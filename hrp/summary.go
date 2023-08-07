@@ -44,18 +44,20 @@ type Summary struct {
 }
 
 func (s *Summary) appendCaseSummary(caseSummary *TestCaseSummary) {
-	s.Success = s.Success && caseSummary.Success
+	s.Success = s.Success && caseSummary.Success == 1
 	s.Stat.TestCases.Total += 1
 	s.Stat.TestSteps.Total += caseSummary.Stat.Total
-	if caseSummary.Success {
+	if caseSummary.Success == 1 {
 		s.Stat.TestCases.Success += 1
-	} else {
+	} else if caseSummary.Success == 2 {
 		s.Stat.TestCases.Fail += 1
+	} else {
+		s.Stat.TestCases.Skips += 1
 	}
 	s.Stat.TestSteps.Successes += caseSummary.Stat.Successes
 	s.Stat.TestSteps.Failures += caseSummary.Stat.Failures
 	s.Details = append(s.Details, caseSummary)
-	s.Success = s.Success && caseSummary.Success
+	s.Success = s.Success && caseSummary.Success == 1
 
 	// specify output reports dir
 	if len(s.Details) == 1 {
@@ -123,12 +125,14 @@ type TestCaseStat struct {
 	Total   int `json:"total" yaml:"total"`
 	Success int `json:"success" yaml:"success"`
 	Fail    int `json:"fail" yaml:"fail"`
+	Skips   int `json:"failures" yaml:"failures"`
 }
 
 type TestStepStat struct {
 	Total     int `json:"total" yaml:"total"`
 	Successes int `json:"successes" yaml:"successes"`
 	Failures  int `json:"failures" yaml:"failures"`
+	Skips     int `json:"failures" yaml:"failures"`
 }
 
 type TestCaseTime struct {
@@ -145,7 +149,7 @@ type Platform struct {
 // TestCaseSummary stores tests summary for one testcase
 type TestCaseSummary struct {
 	Name    string         `json:"name" yaml:"name"`
-	Success bool           `json:"success" yaml:"success"`
+	Success int            `json:"success" yaml:"success"`                     //0 skip 1 succ 2faile
 	CaseId  string         `json:"case_id,omitempty" yaml:"case_id,omitempty"` // TODO
 	Stat    *TestStepStat  `json:"stat" yaml:"stat"`
 	Time    *TestCaseTime  `json:"time" yaml:"time"`
@@ -194,7 +198,7 @@ type ValidationResult struct {
 
 func newSummary() *TestCaseSummary {
 	return &TestCaseSummary{
-		Success: true,
+		Success: 1,
 		Stat:    &TestStepStat{},
 		Time:    &TestCaseTime{},
 		InOut:   &TestCaseInOut{},

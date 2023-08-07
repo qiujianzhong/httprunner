@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"syscall"
 	"testing"
@@ -548,6 +549,30 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 			log.Info().Str("step", stepName).Str("type", stepType).Msg("run step start")
 			stepStartTime := time.Now()
 
+			// run skipIf of step
+			skipIf := step.Struct().SkipIf
+			skipIfInt, err := strconv.Atoi(skipIf)
+			if len(skipIf) > 0 {
+				log.Info().Str("step", step.Name()).
+					Str("type", string(step.Type())+skipIf).Msg("run step skip")
+			}
+			if strings.Contains(strings.ToUpper(skipIf), "TRUE") || skipIfInt > 0 {
+				// log.Info().Str("step", step.Name()).
+				// 	Str("type", string(step.Type())).Msg("run step skip")
+				//TODO add skip result
+				// stepResult := &StepResult{
+				// 	Name:        step.Name(),
+				// 	StepType:    stepTypeRequest,
+				// 	Success:     false,
+				// 	ContentSize: 0,
+				// }
+				// // update summary
+				// r.summary.Records = append(r.summary.Records, stepResult)
+				// r.summary.Stat.Total += 1
+				// r.summary.Stat.Skips += 1
+				continue
+			}
+
 			// run times of step
 			loopTimes := step.Struct().Loops
 			if loopTimes < 0 {
@@ -709,7 +734,7 @@ func (r *SessionRunner) addSingleStepResult(stepResult *StepResult) {
 	} else {
 		r.summary.Stat.Failures += 1
 		// update summary result to failed
-		r.summary.Success = false
+		r.summary.Success = 2
 	}
 }
 

@@ -237,14 +237,22 @@ func InterfaceType(raw interface{}) string {
 
 // LoadFile loads file content with file extension and assigns to structObj
 func LoadFile(path string, structObj interface{}) (err error) {
-	log.Info().Str("path", path).Msg("load file")
+	ext := filepath.Ext(path)
+	if ext == ".env" {
+		env := os.Getenv("env")
+		path = path + env
+		log.Info().Str("path", path).Msg("load env file")
+	} else {
+		log.Info().Str("path", path).Msg("load file")
+	}
+
 	file, err := ReadFile(path)
 	if err != nil {
 		return errors.Wrap(err, "read file failed")
 	}
 	// remove BOM at the beginning of file
 	file = bytes.TrimLeft(file, "\xef\xbb\xbf")
-	ext := filepath.Ext(path)
+
 	switch ext {
 	case ".json", ".har":
 		decoder := json.NewDecoder(bytes.NewReader(file))
