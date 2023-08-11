@@ -58,6 +58,7 @@ function main() {
     echo "Current ARCH: $arch"
     pkg_suffix=".tar.gz"
     pkg="hrp_${version}_${os}_$arch$pkg_suffix"
+    pkg2="hrp_${version}_${os}_$arch"
     echo "Download package: $pkg"
 
     # download from aliyun OSS or github packages
@@ -122,7 +123,8 @@ function main() {
         echo "$ rm -rf $(command -v hrp)"
         rm -rf "$(command -v hrp)"
     fi
-
+    pwd
+    cd $pkg2
     echo "$ chmod +x hrp && mv hrp /usr/local/bin/"
     chmod +x hrp
     mv hrp /usr/local/bin/
