@@ -1,6 +1,7 @@
 package hrp
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -53,12 +54,15 @@ func LoadTestCases(iTestCases ...ITestCase) ([]*TestCase, error) {
 			testCasePath := TestCasePath(path)
 			tc, err := testCasePath.ToTestCase()
 			if err != nil {
+				fmt.Println("文件格式错误：", err)
+				// log.Error().Err(err).Msg("read file error:")
 				return nil
 			}
 			testCases = append(testCases, tc)
 			return nil
 		})
 		if err != nil {
+			log.Error().Err(err).Msg("read dir failed")
 			return nil, errors.Wrap(err, "read dir failed")
 		}
 	}

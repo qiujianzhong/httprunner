@@ -18,12 +18,16 @@ bin_path="output/hrp"
 
 # optional build tags: opencv
 tags=$1
+GOOS=$2
+GOARCH=$3
+#linux amd64
+#
 
 # build
 if [ -z "$tags" ]; then
-    go build -ldflags '-s -w' -o "$bin_path" hrp/cmd/cli/main.go
+    env CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -ldflags '-s -w' -o "$bin_path" hrp/cmd/cli/main.go
 else
-    go build -ldflags '-s -w' -tags "$tags" -o "$bin_path" hrp/cmd/cli/main.go
+    env CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -ldflags '-s -w' -tags "$tags" -o "$bin_path" hrp/cmd/cli/main.go
 fi
 
 # check output and version

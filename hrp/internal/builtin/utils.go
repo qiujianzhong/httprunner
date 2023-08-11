@@ -11,6 +11,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"strconv"
@@ -19,7 +20,9 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
-	"gopkg.in/yaml.v3"
+
+	// "gopkg.in/yaml.v3"
+	"github.com/goccy/go-yaml"
 
 	"github.com/httprunner/httprunner/v4/hrp/internal/code"
 	"github.com/httprunner/httprunner/v4/hrp/internal/json"
@@ -63,7 +66,7 @@ func Dump2YAML(data interface{}, path string) error {
 	// init yaml encoder
 	buffer := new(bytes.Buffer)
 	encoder := yaml.NewEncoder(buffer)
-	encoder.SetIndent(4)
+	// encoder.SetIndent(4)
 
 	// encode
 	err = encoder.Encode(data)
@@ -235,6 +238,11 @@ func InterfaceType(raw interface{}) string {
 	return reflect.TypeOf(raw).String()
 }
 
+type YamlConfig struct {
+	mapdata map[string]interface{}
+	cfg     interface{} //指针类型
+}
+
 // LoadFile loads file content with file extension and assigns to structObj
 func LoadFile(path string, structObj interface{}) (err error) {
 	ext := filepath.Ext(path)
@@ -242,6 +250,16 @@ func LoadFile(path string, structObj interface{}) (err error) {
 		env := os.Getenv("env")
 		path = path + env
 		log.Info().Str("path", path).Msg("load env file")
+
+		dir := strings.Split(path, ".env")[0]
+		command1 := `python3  ` + dir + `common/confRead.py`
+		cmd := exec.Command("/bin/bash", "-c", command1)
+		err := cmd.Run()
+		if err != nil {
+			log.Info().Str("exec", command1).Msg("load env file failed")
+		} else {
+			log.Info().Str("exec", command1).Msg("load env file success")
+		}
 	} else {
 		log.Info().Str("path", path).Msg("load file")
 	}

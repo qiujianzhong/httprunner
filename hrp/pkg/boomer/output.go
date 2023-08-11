@@ -461,10 +461,18 @@ var (
 
 // NewPrometheusPusherOutput returns a PrometheusPusherOutput.
 func NewPrometheusPusherOutput(gatewayURL, jobName string, mode string) *PrometheusPusherOutput {
-	return &PrometheusPusherOutput{
-		pusher: push.New(gatewayURL, jobName).
-			Grouping("instance", uuid.NewV1().String()).
-			Grouping("mode", mode),
+	httprunnertype := os.Getenv("httprunnertype")
+	if len(httprunnertype) > 0 {
+		return &PrometheusPusherOutput{
+			pusher: push.New(gatewayURL, jobName).
+				Grouping("instance", httprunnertype).
+				Grouping("mode", mode),
+		}
+	} else {
+		return &PrometheusPusherOutput{
+			pusher: push.New(gatewayURL, jobName).
+				Grouping("instance", uuid.NewV1().String()).
+				Grouping("mode", mode)}
 	}
 }
 

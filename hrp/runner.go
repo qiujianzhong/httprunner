@@ -550,13 +550,30 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 			stepStartTime := time.Now()
 
 			// run skipIf of step
+			skip := step.Struct().Skip
 			skipIf := step.Struct().SkipIf
-			skipIfInt, err := strconv.Atoi(skipIf)
-			if len(skipIf) > 0 {
-				log.Info().Str("step", step.Name()).
-					Str("type", string(step.Type())+skipIf).Msg("run step skip")
+			parsedskipIf, err := r.caseRunner.parser.ParseString(skipIf, r.sessionVariables)
+			if err != nil {
+				parsedskipIf = skipIf
 			}
-			if strings.Contains(strings.ToUpper(skipIf), "TRUE") || skipIfInt > 0 {
+			skipIf2 := convertString(parsedskipIf)
+			skipIfInt, err := strconv.Atoi(skipIf2)
+
+			SkipUnless := step.Struct().SkipUnless
+			parsedSkipUnless, err := r.caseRunner.parser.ParseString(SkipUnless, r.sessionVariables)
+			if err != nil {
+				parsedSkipUnless = SkipUnless
+			}
+			SkipUnless2 := convertString(parsedSkipUnless)
+
+			if len(skip) > 0 || len(skipIf) > 0 || len(SkipUnless) > 0 {
+				log.Info().Str("step name", step.Name()).
+					Str("skip", skip+"/"+skipIf+"/"+skipIf2+"/"+SkipUnless+"/"+SkipUnless2).Msg("skip:")
+			}
+
+			if strings.Contains(strings.ToUpper(skipIf2), "TRUE") || skipIfInt > 0 || len(skip) > 0 {
+				log.Info().Str("step", step.Name()).
+					Str("skip", skip+"/"+skipIf+"/"+skipIf2+"/"+SkipUnless+"/"+SkipUnless2).Msg("skiped")
 				// log.Info().Str("step", step.Name()).
 				// 	Str("type", string(step.Type())).Msg("run step skip")
 				//TODO add skip result

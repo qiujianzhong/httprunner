@@ -20,7 +20,8 @@ function echoWarn() {
 export -f echoError
 
 function get_latest_version() {
-    curl -ksSL https://httprunner.oss-cn-beijing.aliyuncs.com/VERSION
+  echo "v4.3.5" 
+#    curl -ksSL https://httprunner.oss-cn-beijing.aliyuncs.com/VERSION
 }
 
 function get_os() {
@@ -60,10 +61,9 @@ function main() {
     echo "Download package: $pkg"
 
     # download from aliyun OSS or github packages
-    aliyun_oss_url="https://httprunner.oss-cn-beijing.aliyuncs.com/$pkg"
-    github_url="https://github.com/httprunner/httprunner/releases/download/$version/$pkg"
+    github_url="https://github.com/qiujianzhong/httprunner/releases/download/$version/$pkg"
     valid_flag=false
-    for url in "$aliyun_oss_url" "$github_url"; do
+    for url in  "$github_url"; do
         if curl --output /dev/null --silent --head --fail "$url"; then
             valid_flag=true
             break
@@ -137,11 +137,11 @@ function main() {
     hrp -h
     echo
 
-    if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
-        echoInfo "Upgrade httprunner..."
-        echo "$ $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple"
-        $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple
-    fi
+    # if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
+    #     echoInfo "Upgrade httprunner..."
+    #     echo "$ $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple"
+    #     $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple
+    # fi
 }
 
 main

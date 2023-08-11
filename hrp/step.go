@@ -30,8 +30,10 @@ type StepResult struct {
 // TStep represents teststep data structure.
 // Each step maybe three different types: make one request or reference another api/testcase.
 type TStep struct {
-	Name          string                 `json:"name" yaml:"name"`     // required
-	SkipIf        string                 `json:"skipif" yaml:"skipif"` // SkipIf
+	Name          string                 `json:"name" yaml:"name"`             // required
+	Skip          string                 `json:"skip" yaml:"skip"`             // Skip
+	SkipIf        string                 `json:"skipif" yaml:"skipif"`         // SkipIf
+	SkipUnless    string                 `json:"skipunless" yaml:"skipunless"` // skipunless
 	Request       *Request               `json:"request,omitempty" yaml:"request,omitempty"`
 	API           interface{}            `json:"api,omitempty" yaml:"api,omitempty"`           // *APIPath or *API
 	TestCase      interface{}            `json:"testcase,omitempty" yaml:"testcase,omitempty"` // *TestCasePath or *TestCase
