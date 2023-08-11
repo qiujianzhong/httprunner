@@ -20,7 +20,7 @@ function echoWarn() {
 export -f echoError
 
 function get_latest_version() {
-  echo "v4.3.5" 
+  echo "4.3.5" 
 #    curl -ksSL https://httprunner.oss-cn-beijing.aliyuncs.com/VERSION
 }
 
@@ -40,7 +40,7 @@ function get_arch() {
 function main() {
     echoInfo "Detect target hrp package..."
     version=$(get_latest_version)
-    if [[ $version != v* ]]; then
+    if [[ $version != 4* ]]; then
         echo "get hrp latest version failed:"
         echo "$version"
         exit 1
@@ -57,7 +57,7 @@ function main() {
     arch=$(get_arch)
     echo "Current ARCH: $arch"
     pkg_suffix=".tar.gz"
-    pkg="hrp-$version-$os-$arch$pkg_suffix"
+    pkg="hrp_${version}_${os}_$arch$pkg_suffix"
     echo "Download package: $pkg"
 
     # download from aliyun OSS or github packages
