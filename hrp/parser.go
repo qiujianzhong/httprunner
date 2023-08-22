@@ -46,9 +46,9 @@ func buildURL(baseURL, stepURL string, queryParams url.Values) (fullUrl *url.URL
 		}
 
 		// ensure path suffix '/' exists
-// 		if uStep.RawQuery == "" {
-// 			uStep.Path = strings.TrimRight(uStep.Path, "/") + "/"
-// 		}
+		// 		if uStep.RawQuery == "" {
+		// 			uStep.Path = strings.TrimRight(uStep.Path, "/") + "/"
+		// 		}
 
 		fullUrl = uStep
 	}()
@@ -170,6 +170,8 @@ var (
 
 // ParseString parse string with variables
 func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}) (interface{}, error) {
+	// fmt.Println("raw:", raw)
+	// fmt.Println("variablesMapping lens:", len(variablesMapping))
 	matchStartPosition := 0
 	parsedString := ""
 	remainedString := raw
@@ -271,6 +273,7 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 		parsedString += remainedString
 		break
 	}
+	// fmt.Println("parsedString:", parsedString)
 
 	return parsedString, nil
 }

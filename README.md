@@ -2,9 +2,14 @@
 本仓库是clone  https://github.com/httprunner/httprunner
 ## 修复/新增以下内容：
 
+- 去除4.3.5强制给url加的/
+  
 - 新增skip skipif
   skip: "remark"
   skipif: True
+
+- 新增if
+  if: "$xxx>131 || $yyy==abc"
 
 - 新增环境切换 
   export env= #读取.env
@@ -18,7 +23,7 @@
 
 ## 安装方法：
 ```bash
-$ bash -c "$(curl -ksSL https://raw.githubusercontent.com/qiujianzhong/httprunner/master/scripts/install.sh)"
+bash -c "$(curl -ksSL https://raw.githubusercontent.com/qiujianzhong/httprunner/master/scripts/install.sh)"
 ```
 
 ps:代码写的不是很优雅，只是为了实现功能。

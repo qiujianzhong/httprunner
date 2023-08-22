@@ -31,6 +31,7 @@ type StepResult struct {
 // Each step maybe three different types: make one request or reference another api/testcase.
 type TStep struct {
 	Name          string                 `json:"name" yaml:"name"`             // required
+	If            string                 `json:"if" yaml:"if"`                 // if
 	Skip          string                 `json:"skip" yaml:"skip"`             // Skip
 	SkipIf        string                 `json:"skipif" yaml:"skipif"`         // SkipIf
 	SkipUnless    string                 `json:"skipunless" yaml:"skipunless"` // skipunless

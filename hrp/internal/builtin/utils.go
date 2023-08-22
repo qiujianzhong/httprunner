@@ -21,8 +21,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 
-	// "gopkg.in/yaml.v3"
-	"github.com/goccy/go-yaml"
+	"gopkg.in/yaml.v3"
+	// "github.com/goccy/go-yaml"
 
 	"github.com/httprunner/httprunner/v4/hrp/internal/code"
 	"github.com/httprunner/httprunner/v4/hrp/internal/json"
@@ -66,7 +66,7 @@ func Dump2YAML(data interface{}, path string) error {
 	// init yaml encoder
 	buffer := new(bytes.Buffer)
 	encoder := yaml.NewEncoder(buffer)
-	// encoder.SetIndent(4)
+	encoder.SetIndent(4)
 
 	// encode
 	err = encoder.Encode(data)

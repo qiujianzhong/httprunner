@@ -349,6 +349,96 @@ type CaseRunner struct {
 	rootDir            string // project root dir
 }
 
+func evaluateExpression(expression string) (bool, error) {
+	operators := []string{"&&", "||"}
+	for _, op := range operators {
+		if strings.Contains(expression, op) {
+			parts := strings.Split(expression, op)
+			leftResult, err1 := evaluateExpression(strings.TrimSpace(parts[0]))
+			rightResult, err2 := evaluateExpression(strings.TrimSpace(parts[1]))
+
+			if err1 != nil || err2 != nil {
+				log.Error().Str("Conditions", expression).Err(err1).Err(err2).Msg("evaluateExpression:")
+				return false, fmt.Errorf("无法解析条件")
+
+			}
+
+			if op == "&&" {
+				return leftResult && rightResult, nil
+			} else {
+				return leftResult || rightResult, nil
+			}
+		}
+	}
+
+	return evaluateEquation(expression)
+}
+
+func evaluateEquation(equation string) (bool, error) {
+	operators := []string{">=", "<=", ">", "<", "=="} // 可能的比较符号
+	var operator string
+	var left interface{} // 使用 interface{} 类型可以容纳不同类型的操作数
+	var right interface{}
+
+	for _, op := range operators {
+		if strings.Contains(equation, op) {
+			operator = op
+			parts := strings.Split(equation, op)
+			if len(parts) != 2 {
+				return false, fmt.Errorf("格式错误")
+			}
+
+			leftValue := strings.TrimSpace(parts[0])
+			rightValue := strings.TrimSpace(parts[1])
+
+			// 尝试将操作数解析为数字，如果失败，则保留为字符串
+			leftInt, err1 := strconv.Atoi(leftValue)
+			rightInt, err2 := strconv.Atoi(rightValue)
+
+			if err1 == nil && err2 == nil {
+				left, right = leftInt, rightInt
+			} else {
+				left, right = leftValue, rightValue
+			}
+
+			break
+		}
+	}
+
+	if operator == "" {
+		return false, fmt.Errorf("找不到比较符号")
+	}
+
+	switch operator {
+	case ">=":
+		return compare(left, right) >= 0, nil
+	case "<=":
+		return compare(left, right) <= 0, nil
+	case ">":
+		return compare(left, right) > 0, nil
+	case "<":
+		return compare(left, right) < 0, nil
+	case "==":
+		return compare(left, right) == 0, nil
+	default:
+		return false, fmt.Errorf("未知比较符号")
+	}
+}
+
+func compare(left, right interface{}) int {
+	switch left := left.(type) {
+	case int:
+		if rightInt, ok := right.(int); ok {
+			return left - rightInt
+		}
+	case string:
+		if rightStr, ok := right.(string); ok {
+			return strings.Compare(left, rightStr)
+		}
+	}
+	return 0 // 默认情况，无法比较
+}
+
 // parseConfig parses testcase config, stores to parsedConfig.
 func (r *CaseRunner) parseConfig() error {
 	cfg := r.testCase.Config
@@ -539,6 +629,14 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 			return errors.Wrap(code.InterruptError, "session runner interrupted")
 		default:
 			// TODO: parse step struct
+			// update  variables
+			for k, v := range r.caseRunner.parsedConfig.Variables {
+				r.sessionVariables[k] = v
+			}
+			for k, v := range r.caseRunner.testCase.Config.Variables {
+				r.sessionVariables[k] = v
+			}
+
 			// parse step name
 			parsedName, err := r.caseRunner.parser.ParseString(step.Name(), r.sessionVariables)
 			if err != nil {
@@ -566,14 +664,38 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 			}
 			SkipUnless2 := convertString(parsedSkipUnless)
 
+			Ifs := step.Struct().If
+
+			// fmt.Println("Ifs:", Ifs)
+			parsedIfs, err := r.caseRunner.parser.ParseString(Ifs, r.sessionVariables)
+			if err != nil {
+				parsedIfs = Ifs
+			}
+			// fmt.Println("parsedIfs:", parsedIfs)
+			condition := convertString(parsedIfs)
+			if len(Ifs) > 0 {
+				log.Info().Str("If", Ifs).Msg("If:")
+				result, err := evaluateExpression(condition)
+				// result, err := evaluateEquation(condition)
+				if err != nil {
+					log.Error().Str("Conditions", condition).Err(err).Msg("if:")
+				} else {
+					log.Info().Str("Conditions", condition).Bool("result", result).Msg("if:")
+				}
+				if !result {
+					continue
+				}
+			}
+
 			if len(skip) > 0 || len(skipIf) > 0 || len(SkipUnless) > 0 {
+
 				log.Info().Str("step name", step.Name()).
-					Str("skip", skip+"/"+skipIf+"/"+skipIf2+"/"+SkipUnless+"/"+SkipUnless2).Msg("skip:")
+					Str("skip/skipIf/skipIf2/SkipUnless/SkipUnless2:", skip+"/"+skipIf+"/"+skipIf2+"/"+SkipUnless+"/"+SkipUnless2).Msg("skip:")
 			}
 
 			if strings.Contains(strings.ToUpper(skipIf2), "TRUE") || skipIfInt > 0 || len(skip) > 0 {
 				log.Info().Str("step", step.Name()).
-					Str("skip", skip+"/"+skipIf+"/"+skipIf2+"/"+SkipUnless+"/"+SkipUnless2).Msg("skiped")
+					Str("skip", skip+"/"+skipIf+"/"+skipIf2+"/"+SkipUnless+"/"+SkipUnless2+"/"+Ifs).Msg("skiped")
 				// log.Info().Str("step", step.Name()).
 				// 	Str("type", string(step.Type())).Msg("run step skip")
 				//TODO add skip result
