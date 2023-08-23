@@ -3,6 +3,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TestReport</title>
     <style>
+        .button1 {
+            font-size: 1em;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #06d85f;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease-out;
+        }
+
+        .button1:hover {
+            background-color: #2cffbd;
+        }
+        .success.hidden {
+            display: none;
+        }
+        tr.success.hidden {
+            display: none;
+        }
+        tr.hidden {
+            display: none;
+        }
+
         body {
             background-color: #f2f2f2;
             color: #333;
@@ -201,7 +225,7 @@
         <td colspan="2">{{.Stat.TestSteps.Total}} ({{.Stat.TestSteps.Successes}}/0/{{.Stat.TestSteps.Failures}}/0)</td>
     </tr>
 </table>
-
+<button id="toggle-success" class="button1">Toggle Success Rows</button>
 <h2>Details</h2>
 {{ range $suite_index, $detail := .Details }}
 <h3>{{.Name}}</h3>
@@ -356,4 +380,22 @@
     {{- end }}
 </table>
 {{- end }}
+<script>
+    // 在页面加载完成后执行的 JavaScript 代码
+    document.addEventListener("DOMContentLoaded", function () {
+        var toggleButton = document.getElementById("toggle-success");
+
+        toggleButton.addEventListener("click", function () {
+            var rows = document.querySelectorAll("tr"); // 获取所有行
+            rows.forEach(function (row) {
+                var statusCell = row.querySelector(".success"); // 查找包含 success 类的单元格
+                if (statusCell) {
+                    // 如果找到包含 success 类的单元格
+                    row.classList.toggle("hidden"); // 切换整行的显示/隐藏状态
+                }
+            });
+        });
+    });
+</script>
 </body>
+
