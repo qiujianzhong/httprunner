@@ -26,9 +26,9 @@ const (
 )
 
 const (
-	defaultTimeout     = 30000                        // default timeout 30 seconds for open, read and close
+	defaultTimeout     = 60000                        // default timeout 60 seconds for open, read and close
 	defaultCloseStatus = websocket.CloseNormalClosure // default normal close status
-	defaultWriteWait   = 5 * time.Second              // default timeout 5 seconds for writing control message
+	defaultWriteWait   = 10 * time.Second              // default timeout 10 seconds for writing control message
 )
 
 type ActionType string
@@ -347,13 +347,13 @@ func runStepWebSocket(r *SessionRunner, step *TStep) (stepResult *StepResult, er
 		}
 		resp, err = readMessageWithTimeout(parsedURL, r, step)
 		if err != nil {
-			return stepResult, errors.Wrap(err, "read message failed")
+			return stepResult, errors.Wrap(err, "read message failed1")
 		}
 	case wsRead:
 		log.Info().Int64("timeout(ms)", step.WebSocket.GetTimeout()).Str("url", parsedURL).Msg("read only")
 		resp, err = readMessageWithTimeout(parsedURL, r, step)
 		if err != nil {
-			return stepResult, errors.Wrap(err, "read message failed")
+			return stepResult, errors.Wrap(err, "read message failed2")
 		}
 	case wsWrite:
 		log.Info().Str("url", parsedURL).Msg("write only")
@@ -625,7 +625,7 @@ func closeWithTimeout(urlString string, r *SessionRunner, step *TStep, stepVaria
 				continue
 			}
 			if e, ok := readErr.(*websocket.CloseError); !ok {
-				errorChan <- errors.Wrap(e, "read message failed")
+				errorChan <- errors.Wrap(e, "read message failed3")
 				return
 			}
 		}

@@ -120,8 +120,9 @@ function main() {
     echoInfo "Installing..."
     if hrp -v > /dev/null && [ $(command -v hrp) != "./hrp" ]; then
         echoWarn "$(hrp -v) exists, remove first !!!"
+        time=$(date "+%Y%m%d%H%M%S")
         echo "$ rm -rf $(command -v hrp)"
-        rm -rf "$(command -v hrp)"
+        mv /usr/local/bin/hrp /usr/local/bin/hrp.$time
     fi
     pwd
     cd $pkg2
@@ -139,11 +140,11 @@ function main() {
     hrp -h
     echo
 
-    # if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
-    #     echoInfo "Upgrade httprunner..."
-    #     echo "$ $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple"
-    #     $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple
-    # fi
+    if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
+        echoInfo "Upgrade httprunner..."
+        echo "$ $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple"
+        $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple
+    fi
 }
 
 main

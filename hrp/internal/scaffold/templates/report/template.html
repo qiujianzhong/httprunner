@@ -1,5 +1,5 @@
 <head>
-    <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TestReport</title>
     <style>
@@ -190,212 +190,212 @@
                 width: 70%;
             }
         }
-
     </style>
 
 </head>
 
 <body>
-<h1>API Test Report</h1>
+    <h1>API Test Report</h1>
 
-<h2>Summary</h2>
-<table id="summary">
-    <tr>
-        <th>START AT</th>
-        <td colspan="4">{{.Time.StartAt}}</td>
-    </tr>
-    <tr>
-        <th>DURATION</th>
-        <td colspan="4">{{ .Time.Duration }} seconds</td>
-    </tr>
-    <tr>
-        <th>PLATFORM</th>
-        <td>HttpRunnerPlus {{ .Platform.HttprunnerVersion }}</td>
-        <td>{{ .Platform.GoVersion }}</td>
-        <td colspan="2">{{ .Platform.Platform }}</td>
-    </tr>
-    <tr>
-        <th>STAT</th>
-        <th colspan="2">TESTCASES (success/fail)</th>
-        <th colspan="2">TESTSTEPS (success/fail/error/skip)</th>
-    </tr>
-    <tr>
-        <td>total (details) =></td>
-        <td colspan="2">{{.Stat.TestCases.Total}} ({{.Stat.TestCases.Success}}/{{.Stat.TestCases.Fail}})</td>
-        <td colspan="2">{{.Stat.TestSteps.Total}} ({{.Stat.TestSteps.Successes}}/0/{{.Stat.TestSteps.Failures}}/0)</td>
-    </tr>
-</table>
-<button id="toggle-success" class="button1">Toggle Success Rows</button>
-<h2>Details</h2>
-{{ range $suite_index, $detail := .Details }}
-<h3>{{.Name}}</h3>
-<table id="suite_{{$suite_index}}" class="details">
-    <tr>
-        <td>TOTAL: {{.Stat.Total}}</td>
-        <td>SUCCESS: {{.Stat.Successes}}</td>
-        <td>FAILED: 0</td>
-        <td>ERROR: {{.Stat.Failures}}</td>
-        <td>SKIPPED: 0</td>
-    </tr>
-    <tr>
-        <th>Status</th>
-        <th colspan="2">Name</th>
-        <th>Response Time</th>
-        <th>Detail</th>
-    </tr>
-    {{- range $loop_index, $record := .Records }}
-    {{- with $record}}
-    {{- $status := "error"}}
-    {{- if .Success }} {{ $status = "success" }} {{ end }}
-    <tr id="record_{{$suite_index}}_{{$loop_index}}">
-        <th class={{$status}} style="width:5em;">{{$status}}</th>
-        <td colspan="2">{{.Name}}</td>
-        <td style="text-align:center;width:6em;">{{ .Elapsed }} ms</td>
-        <td class="detail">
-            <a class="button" href="#popup_log_{{$suite_index}}_{{$loop_index}}">log</a>
-            <div id="popup_log_{{$suite_index}}_{{$loop_index}}" class="overlay">
-                <div class="popup">
-                    <h2>Request and Response data</h2>
-                    <a class="close" href="#record_{{$suite_index}}_{{$loop_index}}">&times;</a>
-                    <div class="content">
-                        <h3>Name: {{ .Name }}</h3>
-                        {{- if .Data}}
-                        <h3>Request:</h3>
-                        <div style="overflow: auto">
-                            <table>
-                                {{- range $key, $value := .Data.ReqResps.Request}}
-                                <tr>
-                                    <th>{{$key}}</th>
-                                    <td align="left">
-                                        {{- if eq $key "headers" }}
-                                        {{- range $k, $v := $value }}
-                                        <pre>{{$k}}: {{$v}}</pre>
-                                        {{- end -}}
-                                        {{- else if eq $key "params" }}
-                                        {{- range $k, $v := $value }}
-                                        <pre>{{$k}}: {{$v}}</pre>
-                                        {{- end -}}
-                                        {{- else if eq $key "cookies" }}
-                                        {{- range $k, $v := $value }}
-                                        <pre>{{$k}}: {{$v}}</pre>
-                                        {{- end -}}
-                                        {{- else }}
-                                        <pre>{{$value}}</pre>
+    <h2>Summary</h2>
+    <table id="summary">
+        <tr>
+            <th>START AT</th>
+            <td colspan="4">{{.Time.StartAt}}</td>
+        </tr>
+        <tr>
+            <th>DURATION</th>
+            <td colspan="4">{{ .Time.Duration }} seconds</td>
+        </tr>
+        <tr>
+            <th>PLATFORM</th>
+            <td>HttpRunnerPlus {{ .Platform.HttprunnerVersion }}</td>
+            <td>{{ .Platform.GoVersion }}</td>
+            <td colspan="2">{{ .Platform.Platform }}</td>
+        </tr>
+        <tr>
+            <th>STAT</th>
+            <th colspan="2">TESTCASES (success/fail)</th>
+            <th colspan="2">TESTSTEPS (success/fail/error/skip)</th>
+        </tr>
+        <tr>
+            <td>total (details) =></td>
+            <td colspan="2">{{.Stat.TestCases.Total}} ({{.Stat.TestCases.Success}}/{{.Stat.TestCases.Fail}})</td>
+            <td colspan="2">{{.Stat.TestSteps.Total}} ({{.Stat.TestSteps.Successes}}/0/{{.Stat.TestSteps.Failures}}/0)
+            </td>
+        </tr>
+    </table>
+    <button id="toggle-success" class="button1">Toggle Success Rows</button>
+    <h2>Details</h2>
+    {{ range $suite_index, $detail := .Details }}
+    <h3>{{.Name}}</h3>
+        <table id="suite_{{$suite_index}}" class="details success1">
+            <tr >
+                <td class="success1">TOTAL: {{.Stat.Total}}</td>
+                <td>SUCCESS: {{.Stat.Successes}}</td>
+                <td>FAILED: 0</td>
+                <td>ERROR: {{.Stat.Failures}}</td>
+                <td>SKIPPED: 0</td>
+            </tr>
+            <tr>
+                <th  class="success1">Status</th>
+                <th colspan="2">Name</th>
+                <th>Response Time</th>
+                <th>Detail</th>
+            </tr>
+            {{- range $loop_index, $record := .Records }}
+            {{- with $record}}
+            {{- $status := "error"}}
+            {{- if .Success }} {{ $status = "success" }} {{ end }}
+            <tr id="record_{{$suite_index}}_{{$loop_index}}">
+                <th class={{$status}} style="width:5em;">{{$status}}</th>
+                <td colspan="2">{{.Name}}</td>
+                <td style="text-align:center;width:6em;">{{ .Elapsed }} ms</td>
+                <td class="detail">
+                    <a class="button" href="#popup_log_{{$suite_index}}_{{$loop_index}}">log</a>
+                    <div id="popup_log_{{$suite_index}}_{{$loop_index}}" class="overlay">
+                        <div class="popup">
+                            <h2>Request and Response data</h2>
+                            <a class="close" href="#record_{{$suite_index}}_{{$loop_index}}">&times;</a>
+                            <div class="content">
+                                <h3>Name: {{ .Name }}</h3>
+                                {{- if .Data}}
+                                <h3>Request:</h3>
+                                <div style="overflow: auto">
+                                    <table>
+                                        {{- range $key, $value := .Data.ReqResps.Request}}
+                                        <tr>
+                                            <th>{{$key}}</th>
+                                            <td align="left">
+                                                {{- if eq $key "headers" }}
+                                                {{- range $k, $v := $value }}
+                                                <pre>{{$k}}: {{$v}}</pre>
+                                                {{- end -}}
+                                                {{- else if eq $key "params" }}
+                                                {{- range $k, $v := $value }}
+                                                <pre>{{$k}}: {{$v}}</pre>
+                                                {{- end -}}
+                                                {{- else if eq $key "cookies" }}
+                                                {{- range $k, $v := $value }}
+                                                <pre>{{$k}}: {{$v}}</pre>
+                                                {{- end -}}
+                                                {{- else }}
+                                                <pre>{{$value}}</pre>
+                                                {{- end }}
+                                            </td>
+                                        </tr>
                                         {{- end }}
-                                    </td>
-                                </tr>
-                                {{- end }}
-                            </table>
-                        </div>
-                        <h3>Response:</h3>
-                        <div style="overflow: auto">
-                            <table>
-                                {{- range $key, $value := .Data.ReqResps.Response}}
-                                <tr>
-                                    <th>{{$key}}</th>
-                                    <td align="left">
-                                        {{- if eq $key "headers" }}
-                                        {{- range $k, $v := $value}}
-                                        <pre>{{$k}}: {{$v}}</pre>
-                                        {{- end -}}
-                                        {{- else if eq $key "cookies" }}
-                                        {{- range $k, $v := $value }}
-                                        <pre>{{$k}}: {{$v}}</pre>
-                                        {{- end -}}
-                                        {{- else }}
-                                        <pre>{{ $value }}</pre>
+                                    </table>
+                                </div>
+                                <h3>Response:</h3>
+                                <div style="overflow: auto">
+                                    <table>
+                                        {{- range $key, $value := .Data.ReqResps.Response}}
+                                        <tr>
+                                            <th>{{$key}}</th>
+                                            <td align="left">
+                                                {{- if eq $key "headers" }}
+                                                {{- range $k, $v := $value}}
+                                                <pre>{{$k}}: {{$v}}</pre>
+                                                {{- end -}}
+                                                {{- else if eq $key "cookies" }}
+                                                {{- range $k, $v := $value }}
+                                                <pre>{{$k}}: {{$v}}</pre>
+                                                {{- end -}}
+                                                {{- else }}
+                                                <pre>{{ $value }}</pre>
+                                                {{- end }}
+                                            </td>
+                                        </tr>
                                         {{- end }}
-                                    </td>
-                                </tr>
-                                {{- end }}
-                            </table>
-                        </div>
+                                    </table>
+                                </div>
 
-                        <h3>Validators:</h3>
-                        <div style="overflow: auto">
-                            {{- if .Data.Validators }}
-                            <table>
-                                <tr>
-                                    <th>check</th>
-                                    <th>comparator</th>
-                                    <th>expect value</th>
-                                    <th>actual value</th>
-                                </tr>
-                                {{- range $validator := .Data.Validators }}
-                                <tr>
-                                    {{- if eq $validator.CheckResult "pass" }}
-                                    <td class="passed">
-                                        {{- else if eq $validator.CheckResult "fail" }}
-                                    <td class="failed">
-                                        {{- else if eq $validator.CheckResult "unchecked" }}
-                                    <td class="unchecked">
+                                <h3>Validators:</h3>
+                                <div style="overflow: auto">
+                                    {{- if .Data.Validators }}
+                                    <table>
+                                        <tr>
+                                            <th>check</th>
+                                            <th>comparator</th>
+                                            <th>expect value</th>
+                                            <th>actual value</th>
+                                        </tr>
+                                        {{- range $validator := .Data.Validators }}
+                                        <tr>
+                                            {{- if eq $validator.CheckResult "pass" }}
+                                            <td class="passed">
+                                                {{- else if eq $validator.CheckResult "fail" }}
+                                            <td class="failed">
+                                                {{- else if eq $validator.CheckResult "unchecked" }}
+                                            <td class="unchecked">
+                                                {{- end }}
+                                                {{$validator.Check}}
+                                            </td>
+                                            <td>{{$validator.Assert}}</td>
+                                            <td>{{$validator.Expect}}</td>
+                                            <td>{{$validator.CheckValue}}</td>
+                                        </tr>
                                         {{- end }}
-                                        {{$validator.Check}}
-                                    </td>
-                                    <td>{{$validator.Assert}}</td>
-                                    <td>{{$validator.Expect}}</td>
-                                    <td>{{$validator.CheckValue}}</td>
-                                </tr>
-                                {{- end }}
-                            </table>
-                            {{- end }}
+                                    </table>
+                                    {{- end }}
 
-                            <h3>Statistics:</h3>
-                            <div style="overflow: auto">
-                                <table>
-                                    <tr>
-                                        <th>content_size(bytes)</th>
-                                        <td>{{ .ContentSize }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>response_time(ms)</th>
-                                        <td>{{ .Elapsed }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>elapsed(ms)</th>
-                                        <td>{{ .Elapsed }}</td>
-                                    </tr>
-                                </table>
+                                    <h3>Statistics:</h3>
+                                    <div style="overflow: auto">
+                                        <table>
+                                            <tr>
+                                                <th>content_size(bytes)</th>
+                                                <td>{{ .ContentSize }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>response_time(ms)</th>
+                                                <td>{{ .Elapsed }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>elapsed(ms)</th>
+                                                <td>{{ .Elapsed }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                {{- end }}
                             </div>
                         </div>
-                        {{- end }}
                     </div>
-                </div>
-            </div>
-            {{ if .Attachments }}
-            <a class="button" href="#popup_attachment_{{$suite_index}}_{{$loop_index}}">traceback</a>
-            <div id="popup_attachment_{{$suite_index}}_{{$loop_index}}" class="overlay">
-                <div class="popup">
-                    <h2>Traceback Message</h2>
-                    <a class="close" href="#record_{{$suite_index}}_{{$loop_index}}">&times;</a>
-                    <div class="content">
-                        <pre>{{ .Attachments }}</pre>
+                    {{ if .Attachments }}
+                    <a class="button" href="#popup_attachment_{{$suite_index}}_{{$loop_index}}">traceback</a>
+                    <div id="popup_attachment_{{$suite_index}}_{{$loop_index}}" class="overlay">
+                        <div class="popup">
+                            <h2>Traceback Message</h2>
+                            <a class="close" href="#record_{{$suite_index}}_{{$loop_index}}">&times;</a>
+                            <div class="content">
+                                <pre>{{ .Attachments }}</pre>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                    {{- end }}
+                </td>
+            </tr>
             {{- end }}
-        </td>
-    </tr>
-    {{- end }}
-    {{- end }}
-</table>
-{{- end }}
-<script>
-    // 在页面加载完成后执行的 JavaScript 代码
-    document.addEventListener("DOMContentLoaded", function () {
-        var toggleButton = document.getElementById("toggle-success");
+            {{- end }}
+        </table>
+        {{- end }}
+        <script>
+            // 在页面加载完成后执行的 JavaScript 代码
+            document.addEventListener("DOMContentLoaded", function () {
+                var toggleButton = document.getElementById("toggle-success");
 
-        toggleButton.addEventListener("click", function () {
-            var rows = document.querySelectorAll("tr"); // 获取所有行
-            rows.forEach(function (row) {
-                var statusCell = row.querySelector(".success"); // 查找包含 success 类的单元格
-                if (statusCell) {
-                    // 如果找到包含 success 类的单元格
-                    row.classList.toggle("hidden"); // 切换整行的显示/隐藏状态
-                }
+                toggleButton.addEventListener("click", function () {
+                    var rows = document.querySelectorAll("tr"); // 获取所有行
+                    rows.forEach(function (row) {
+                        var statusCell = row.querySelector(".success"); // 查找包含 success 类的单元格
+                        var statusCell1 = row.querySelector(".success1"); // 查找包含 success 类的单元格
+                        if (statusCell||statusCell1) {
+                            // 如果找到包含 success 类的单元格
+                            row.classList.toggle("hidden"); // 切换整行的显示/隐藏状态
+                        }
+                    });
+                });
             });
-        });
-    });
-</script>
+        </script>
 </body>
-

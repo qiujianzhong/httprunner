@@ -96,32 +96,33 @@ class GA4Client(object):
             logger.debug(f"send GA4 event, uri: {self.uri}, payload: {payload}")
 
         try:
-            resp = self.http_client.post(self.uri, json=payload, timeout=5)
+            print("skip GA4")
+            # resp = self.http_client.post(self.uri, json=payload, timeout=5)
         except Exception as err:  # ProxyError, SSLError, ConnectionError
             logger.error(f"request GA4 failed, error: {err}")
-            return
+        return
+        #
+        # if resp.status_code >= 300:
+        #     logger.error(
+        #         f"validation response got unexpected status: {resp.status_code}"
+        #     )
+        #     return
+        #
+        # if not self.debug:
+        #     return
+        #
+        # try:
+        #     resp_body = resp.json()
+        #     logger.debug(
+        #         "get GA4 validation response, "
+        #         f"status code: {resp.status_code}, body: {resp_body}"
+        #     )
+        # except Exception:
+        #     pass
 
-        if resp.status_code >= 300:
-            logger.error(
-                f"validation response got unexpected status: {resp.status_code}"
-            )
-            return
 
-        if not self.debug:
-            return
-
-        try:
-            resp_body = resp.json()
-            logger.debug(
-                "get GA4 validation response, "
-                f"status code: {resp.status_code}, body: {resp_body}"
-            )
-        except Exception:
-            pass
-
-
-GA4_MEASUREMENT_ID = "G-9KHR3VC2LN"
-GA4_API_SECRET = "w7lKNQIrQsKNS4ikgMPp0Q"
+GA4_MEASUREMENT_ID = ""
+GA4_API_SECRET = ""
 
 ga4_client = GA4Client(GA4_MEASUREMENT_ID, GA4_API_SECRET, False)
 

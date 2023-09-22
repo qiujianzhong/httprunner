@@ -38,6 +38,7 @@ var (
 	saveTests         bool
 	genHTMLReport     bool
 	caseTimeout       float32
+	retry             float32
 )
 
 func init() {
@@ -49,7 +50,8 @@ func init() {
 	runCmd.Flags().StringVarP(&proxyUrl, "proxy-url", "p", "", "set proxy url")
 	runCmd.Flags().BoolVarP(&saveTests, "save-tests", "s", false, "save tests summary")
 	runCmd.Flags().BoolVarP(&genHTMLReport, "gen-html-report", "g", false, "generate html report")
-	runCmd.Flags().Float32Var(&caseTimeout, "case-timeout", 3600, "set testcase timeout (seconds)")
+	runCmd.Flags().Float32Var(&caseTimeout, "case-timeout", 120, "set testcase timeout (seconds)")
+	runCmd.Flags().Float32Var(&retry, "retry", 0, "set testcase retry times")
 }
 
 func makeHRPRunner() *hrp.HRPRunner {

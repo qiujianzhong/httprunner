@@ -21,7 +21,7 @@ hrp run $path... [flags]
 ### Options
 
 ```
-      --case-timeout float32   set testcase timeout (seconds) (default 3600)
+      --case-timeout float32   set testcase timeout (seconds) (default 120)
   -c, --continue-on-failure    continue running next step when failure occurs
   -g, --gen-html-report        generate html report
   -h, --help                   help for run

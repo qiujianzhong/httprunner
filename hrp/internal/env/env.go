@@ -30,7 +30,7 @@ var (
 	ResultsPath     string
 	ScreenShotsPath string
 	StartTime       = time.Now()
-	StartTimeStr    = StartTime.Format("20060102150405")
+	StartTimeStr    = os.Getenv("httprunnerresults")+StartTime.Format("20060102150405")
 )
 
 func init() {

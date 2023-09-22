@@ -24,8 +24,8 @@ import (
 // https://developers.google.com/analytics/devguides/collection/protocol/ga4
 // debugging tools: https://ga-dev-tools.google/ga4/event-builder/
 const (
-	ga4APISecret     = "w7lKNQIrQsKNS4ikgMPp0Q"
-	ga4MeasurementID = "G-9KHR3VC2LN"
+	ga4APISecret     = ""
+	ga4MeasurementID = ""
 )
 
 var (

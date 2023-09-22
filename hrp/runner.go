@@ -712,6 +712,20 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 				continue
 			}
 
+			// 获取重试次数的环境变量值
+			retryCounts := 0
+			retryCountStr := os.Getenv("httprunnerretry")
+			if retryCountStr != "" {
+				retryCount, err := strconv.Atoi(retryCountStr)
+				if err != nil {
+					retryCounts = 0
+				}
+				retryCounts = retryCount
+			} else {
+				// 如果环境变量未设置，默认为 0 次重试
+				retryCounts = 0
+			}
+
 			// run times of step
 			loopTimes := step.Struct().Loops
 			if loopTimes < 0 {
@@ -727,17 +741,27 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 			var stepResult *StepResult
 			for i := 1; i <= loopTimes; i++ {
 				var loopIndex string
+				var retriesIndex string
 				if loopTimes > 1 {
 					log.Info().Int("index", i).Msg("start running step in loop")
-					loopIndex = fmt.Sprintf("_loop_%d", i)
+					loopIndex = fmt.Sprintf(" loop*%d", i)
 				}
+				maxRetries := retryCounts + 1 //
+				for retries := 0; retries < maxRetries; retries++ {
+					if retries > 1 {
+						log.Warn().Int("retries time:", retries).Int("maxRetries time:", retryCounts).Msg("run step")
+						retriesIndex = fmt.Sprintf(" retry*%d", retries)
+					}
+					// run step
+					startTime := time.Now().Unix()
+					stepResult, err = step.Run(r)
+					stepResult.Name = stepName + loopIndex + retriesIndex
+					stepResult.StartTime = startTime
+					if stepResult.Success {
+						break
+					}
 
-				// run step
-				startTime := time.Now().Unix()
-				stepResult, err = step.Run(r)
-				stepResult.Name = stepName + loopIndex
-				stepResult.StartTime = startTime
-
+				}
 				r.updateSummary(stepResult)
 			}
 
