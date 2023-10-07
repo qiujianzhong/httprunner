@@ -748,9 +748,10 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 				}
 				maxRetries := retryCounts + 1 //
 				for retries := 0; retries < maxRetries; retries++ {
-					if retries > 1 {
+					if retries > 0 {
 						log.Warn().Int("retries time:", retries).Int("maxRetries time:", retryCounts).Msg("run step")
 						retriesIndex = fmt.Sprintf(" retry*%d", retries)
+						time.Sleep(time.Second)
 					}
 					// run step
 					startTime := time.Now().Unix()
@@ -758,11 +759,15 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 					stepResult.Name = stepName + loopIndex + retriesIndex
 					stepResult.StartTime = startTime
 					if stepResult.Success {
+						r.updateSummary(stepResult)
 						break
+					} else {
+						if retries != retryCounts {
+							stepResult.Success = true
+						}
+						r.updateSummary(stepResult)
 					}
-
 				}
-				r.updateSummary(stepResult)
 			}
 
 			// update extracted variables
