@@ -231,8 +231,12 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 
 			// raw_string contains one or many functions, e.g. "abc${add_one(3)}def"
 			matchStartPosition += len(funcMatched[0])
-			parsedString += convertString(result)
-			remainedString = raw[matchStartPosition:]
+			// parsedString += convertString(result)
+			// remainedString = raw[matchStartPosition:]
+
+			parsedString = strings.Replace(parsedString, funcMatched[0], convertString(result), -1)
+			remainedString = strings.Replace(remainedString, funcMatched[0], convertString(result), -1)
+
 			log.Debug().
 				Str("parsedString", parsedString).
 				Int("matchStartPosition", matchStartPosition).
@@ -260,9 +264,12 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 				return varValue, nil
 			}
 
-			matchStartPosition += len(varMatched[0])
-			parsedString += convertString(varValue)
-			remainedString = raw[matchStartPosition:]
+			// matchStartPosition += len(varMatched[0])
+			// parsedString += convertString(varValue)
+			// remainedString = raw[matchStartPosition:]
+			parsedString = strings.Replace(parsedString, varMatched[0], convertString(varValue), -1)
+			remainedString = strings.Replace(remainedString, varMatched[0], convertString(varValue), -1)
+
 			log.Debug().
 				Str("parsedString", parsedString).
 				Int("matchStartPosition", matchStartPosition).
@@ -270,7 +277,7 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 			continue
 		}
 
-		parsedString += remainedString
+		// parsedString += remainedString
 		break
 	}
 	// fmt.Println("parsedString:", parsedString)
