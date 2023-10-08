@@ -34,3 +34,6 @@ fi
 ls -lh "$bin_path"
 chmod +x "$bin_path"
 ./"$bin_path" -v
+
+ mv ./output/hrp /usr/local/bin/hrp 
+ 

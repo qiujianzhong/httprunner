@@ -176,7 +176,7 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 	parsedString := ""
 	remainedString := raw
 
-	for matchStartPosition < len(raw) {
+	for matchStartPosition < len(parsedString)+len(remainedString) {
 		// locate $ char position
 		startPosition := strings.Index(remainedString, "$")
 		if startPosition == -1 { // no $ found
@@ -221,7 +221,7 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 					Err(err).Msg("call function failed")
 				return raw, errors.Wrap(code.CallFunctionError, err.Error())
 			}
-			log.Info().Str("funcName", funcName).Interface("arguments", arguments).
+			log.Debug().Str("funcName", funcName).Interface("arguments", arguments).
 				Interface("output", result).Msg("call function success")
 
 			if funcMatched[0] == raw {
@@ -230,7 +230,7 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 			}
 
 			// raw_string contains one or many functions, e.g. "abc${add_one(3)}def"
-			matchStartPosition += len(funcMatched[0])
+			matchStartPosition += 1
 			// parsedString += convertString(result)
 			// remainedString = raw[matchStartPosition:]
 
@@ -238,7 +238,11 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 			remainedString = strings.Replace(remainedString, funcMatched[0], convertString(result), -1)
 
 			log.Debug().
+				Str("raw", raw).
 				Str("parsedString", parsedString).
+				Str("remainedString", remainedString).
+				Str("varMatched[0]", funcMatched[0]).
+				Str("result", convertString(result)).
 				Int("matchStartPosition", matchStartPosition).
 				Msg("[parseString] parse function")
 			continue
@@ -264,23 +268,30 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 				return varValue, nil
 			}
 
-			// matchStartPosition += len(varMatched[0])
+			matchStartPosition += 1
 			// parsedString += convertString(varValue)
 			// remainedString = raw[matchStartPosition:]
 			parsedString = strings.Replace(parsedString, varMatched[0], convertString(varValue), -1)
 			remainedString = strings.Replace(remainedString, varMatched[0], convertString(varValue), -1)
-
 			log.Debug().
+				Str("raw", raw).
 				Str("parsedString", parsedString).
+				Str("remainedString", remainedString).
+				Str("varMatched[0]", varMatched[0]).
+				Str("result", convertString(varValue)).
 				Int("matchStartPosition", matchStartPosition).
 				Msg("[parseString] parse variable")
 			continue
 		}
 
-		// parsedString += remainedString
+		parsedString += remainedString
 		break
 	}
 	// fmt.Println("parsedString:", parsedString)
+	log.Debug().
+		Str("raw", raw).
+		Str("parsedString", parsedString).
+		Msg("[parseString] parsedString end")
 
 	return parsedString, nil
 }
