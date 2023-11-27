@@ -15,6 +15,8 @@ import (
 	"github.com/httprunner/httprunner/v4/hrp/internal/version"
 )
 
+var Logger zerolog.Logger
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "hrp",
@@ -41,7 +43,7 @@ Copyright 2017 debugtalk`,
 			noColor = true
 		}
 		if !logJSON {
-			log.Logger = zerolog.New(zerolog.ConsoleWriter{NoColor: noColor, Out: os.Stderr}).With().Timestamp().Logger()
+			log.Logger = zerolog.New(zerolog.ConsoleWriter{NoColor: noColor, TimeFormat: "01-02 15:04:05", Out: os.Stderr}).With().Timestamp().Logger()
 			log.Info().Msg("Set log to color console")
 		}
 	},
@@ -67,12 +69,17 @@ func Execute() int {
 	adb.Init(rootCmd)
 
 	err := rootCmd.Execute()
+	// set log timestamp precise to milliseconds
+	zerolog.TimeFieldFormat = "2006-01-02 15:04:05"
 	return code.GetErrorCode(err)
 }
 
 func setLogLevel(level string) {
 	level = strings.ToUpper(level)
 	log.Info().Str("level", level).Msg("Set log level")
+	// set log timestamp precise to milliseconds
+	zerolog.TimeFieldFormat = "2006-01-02 15:04:05"
+
 	switch level {
 	case "DEBUG":
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)

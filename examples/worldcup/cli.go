@@ -82,6 +82,7 @@ func main() {
 func setLogLevel(level string) {
 	level = strings.ToUpper(level)
 	log.Info().Str("level", level).Msg("Set log level")
+	zerolog.TimeFieldFormat = "2006-01-02 15:04:05"
 	switch level {
 	case "DEBUG":
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)

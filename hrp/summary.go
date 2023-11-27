@@ -22,6 +22,7 @@ func newOutSummary() *Summary {
 		HttprunnerVersion: version.VERSION,
 		GoVersion:         runtime.Version(),
 		Platform:          fmt.Sprintf("%v-%v", runtime.GOOS, runtime.GOARCH),
+		Title:             fmt.Sprintf(os.Getenv("httprunnertitle")),
 	}
 	return &Summary{
 		Success: true,
@@ -144,6 +145,7 @@ type Platform struct {
 	HttprunnerVersion string `json:"httprunner_version" yaml:"httprunner_version"`
 	GoVersion         string `json:"go_version" yaml:"go_version"`
 	Platform          string `json:"platform" yaml:"platform"`
+	Title             string `json:"title" yaml:"title"`
 }
 
 // TestCaseSummary stores tests summary for one testcase

@@ -176,7 +176,7 @@ func (p *Parser) ParseString(raw string, variablesMapping map[string]interface{}
 	parsedString := ""
 	remainedString := raw
 
-	for matchStartPosition < len(parsedString)+len(remainedString) {
+	for matchStartPosition < len(parsedString)+len(remainedString)+10000 {
 		// locate $ char position
 		startPosition := strings.Index(remainedString, "$")
 		if startPosition == -1 { // no $ found

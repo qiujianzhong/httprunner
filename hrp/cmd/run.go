@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 
 	"github.com/httprunner/httprunner/v4/hrp"
@@ -38,7 +40,8 @@ var (
 	saveTests         bool
 	genHTMLReport     bool
 	caseTimeout       float32
-	retry             float32
+	retry             string
+	title             string
 )
 
 func init() {
@@ -51,7 +54,8 @@ func init() {
 	runCmd.Flags().BoolVarP(&saveTests, "save-tests", "s", false, "save tests summary")
 	runCmd.Flags().BoolVarP(&genHTMLReport, "gen-html-report", "g", false, "generate html report")
 	runCmd.Flags().Float32Var(&caseTimeout, "case-timeout", 120, "set testcase timeout (seconds)")
-	runCmd.Flags().Float32Var(&retry, "retry", 0, "set testcase retry times")
+	runCmd.Flags().StringVarP(&retry, "retry", "r", "0", "set testcase retry times")
+	runCmd.Flags().StringVarP(&title, "title", "t", "Test Report", "set report title")
 }
 
 func makeHRPRunner() *hrp.HRPRunner {
@@ -76,6 +80,14 @@ func makeHRPRunner() *hrp.HRPRunner {
 	}
 	if proxyUrl != "" {
 		runner.SetProxyUrl(proxyUrl)
+	}
+	if retry != "0" {
+		os.Setenv("httprunnerretry", retry)
+	}
+	if title != "" {
+		os.Setenv("httprunnertitle", title)
+	} else {
+		os.Setenv("httprunnertitle", "")
 	}
 	return runner
 }

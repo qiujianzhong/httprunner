@@ -21,6 +21,7 @@ import (
 	"github.com/httprunner/funplugin"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/net/http2"
 
@@ -33,6 +34,8 @@ import (
 
 // Run starts to run testcase with default configs.
 func Run(t *testing.T, testcases ...ITestCase) error {
+	// set log timestamp precise to milliseconds
+	zerolog.TimeFieldFormat = "2006-01-02 15:04:05"
 	err := NewRunner(t).SetSaveTests(true).Run(testcases...)
 	code.GetErrorCode(err)
 	return err
@@ -194,6 +197,8 @@ func (r *HRPRunner) GenHTMLReport() *HRPRunner {
 
 // Run starts to execute one or multiple testcases.
 func (r *HRPRunner) Run(testcases ...ITestCase) (err error) {
+	// set log timestamp precise to milliseconds
+	zerolog.TimeFieldFormat = "2006-01-02 15:04:05"
 	log.Info().Str("hrp_version", version.VERSION).Msg("start running")
 
 	startTime := time.Now()
