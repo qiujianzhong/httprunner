@@ -140,8 +140,7 @@ function main() {
     hrp -h
     echo
 
-curl https://raw.githubusercontent.com/qiujianzhong/httprunner/master/examples/demo-with-py-plugin/testcases/requests.yml > requests.yml
-nohup hrp run requests.yml --log-requests-off --log-level ERROR >/dev/null 2>&1 
+python3 -m venv /Users/anders/.hrp/venv
 
     if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
         echoInfo "Upgrade httprunner..."
