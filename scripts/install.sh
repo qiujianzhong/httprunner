@@ -146,6 +146,7 @@ function main() {
         $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple
         $HOME/.hrp/venv/bin/pip3 install requests
         $HOME/.hrp/venv/bin/pip3 install fake-useragent
+        $HOME/.hrp/venv/bin/pip3 install chardet
     fi
 }
 
