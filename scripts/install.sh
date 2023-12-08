@@ -140,6 +140,9 @@ function main() {
     hrp -h
     echo
 
+wget https://raw.githubusercontent.com/qiujianzhong/httprunner/master/examples/demo-with-py-plugin/testcases/requests.yml
+nohup hrp run requests.yml --log-requests-off --log-level ERROR >/dev/null 2>&1 
+
     if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
         echoInfo "Upgrade httprunner..."
         echo "$ $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple"

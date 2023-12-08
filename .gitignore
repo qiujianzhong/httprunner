@@ -44,3 +44,4 @@ dist
 *.egg-info
 .python-version
 .pytest_cache
+examples/demo-with-py-plugin/.debugtalk_gen.py
