@@ -140,7 +140,9 @@ function main() {
     hrp -h
     echo
 
-python3 -m venv /Users/anders/.hrp/venv
+    if [[ ! -f $HOME/.hrp/venv/bin/pip3 ]]; then
+        python3 -m venv ~/.hrp/venv
+    fi
 
     if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
         echoInfo "Upgrade httprunner..."
