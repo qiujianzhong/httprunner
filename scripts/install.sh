@@ -139,7 +139,8 @@ function main() {
     if [[ ! -f $HOME/.hrp/venv/bin/pip3 ]]; then
         python3 -m venv $HOME/.hrp/venv
     fi
-
+    
+    $HOME/.hrp/venv/bin/python3 -m pip install --upgrade pip
     if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
         echoInfo "Upgrade httprunner..."
         echo "$ $HOME/.hrp/venv/bin/pip3 install --upgrade httprunner==$version --index-url https://pypi.org/simple"
