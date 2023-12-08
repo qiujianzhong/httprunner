@@ -129,19 +129,15 @@ function main() {
     echo "$ chmod +x hrp && mv hrp /usr/local/bin/"
     chmod +x hrp
     mv hrp /usr/local/bin/
+    cd
+    rm -rf $tmp_dir
     echo
 
-    echoInfo "Check installation..."
-    echo "$ command -v hrp"
-    command -v hrp
-    echo "$ hrp -v"
-    hrp -v
-    echo "$ hrp -h"
-    hrp -h
-    echo
+
+
 
     if [[ ! -f $HOME/.hrp/venv/bin/pip3 ]]; then
-        python3 -m venv ~/.hrp/venv
+        python3 -m venv $HOME/.hrp/venv
     fi
 
     if [[ -f $HOME/.hrp/venv/bin/pip3 ]]; then
@@ -152,6 +148,15 @@ function main() {
         $HOME/.hrp/venv/bin/pip3 install fake-useragent
         $HOME/.hrp/venv/bin/pip3 install chardet
     fi
+
+    echoInfo "Check installation..."
+    echo "$ command -v hrp"
+    command -v hrp
+    echo "$ hrp -v"
+    hrp -v
+    echo "$ hrp -h"
+    hrp -h
+    echo
 }
 
 main
