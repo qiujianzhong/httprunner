@@ -435,6 +435,7 @@ func runStepRequest(r *SessionRunner, step *TStep) (stepResult *StepResult, err 
 		stepResult.Success = true
 	}
 	stepResult.ContentSize = resp.ContentLength
+	stepResult.HttpCode = int64(resp.StatusCode)
 	stepResult.Data = sessionData
 
 	return stepResult, err

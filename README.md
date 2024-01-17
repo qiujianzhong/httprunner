@@ -36,7 +36,7 @@
 
 ## 安装方法：
 ```bash
-bash -c "$(curl -ksSL https://raw.githubusercontent.com/qiujianzhong/httprunner/master/scripts/install.sh)"
+sudo bash -c "$(curl -ksSL https://raw.githubusercontent.com/qiujianzhong/httprunner/master/scripts/install.sh)"
 ```
 
 ps:代码写的不是很优雅，只是为了实现功能。

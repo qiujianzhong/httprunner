@@ -23,6 +23,7 @@ type StepResult struct {
 	HttpStat    map[string]int64       `json:"httpstat,omitempty" yaml:"httpstat,omitempty"`       // httpstat in millisecond(ms)
 	Data        interface{}            `json:"data,omitempty" yaml:"data,omitempty"`               // session data or slice of step data
 	ContentSize int64                  `json:"content_size" yaml:"content_size"`                   // response body length
+	HttpCode    int64                  `json:"httpcode" yaml:"httpcode"`                           // response httpcode
 	ExportVars  map[string]interface{} `json:"export_vars,omitempty" yaml:"export_vars,omitempty"` // extract variables
 	Attachments interface{}            `json:"attachments,omitempty" yaml:"attachments,omitempty"` // store extra step information, such as error message or screenshots
 }

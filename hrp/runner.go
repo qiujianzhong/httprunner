@@ -763,7 +763,8 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 					stepResult, err = step.Run(r)
 					stepResult.Name = stepName + loopIndex + retriesIndex
 					stepResult.StartTime = startTime
-					if stepResult.Success {
+					if stepResult.Success || stepResult.HttpCode > 499 {
+						//log.Info().Int64("HttpCode", stepResult.HttpCode).Msg("run HttpCode")
 						r.updateSummary(stepResult)
 						break
 					} else {
