@@ -41,6 +41,7 @@ var (
 	genHTMLReport     bool
 	caseTimeout       float32
 	retry             string
+	retrytime         string
 	title             string
 )
 
@@ -55,6 +56,7 @@ func init() {
 	runCmd.Flags().BoolVarP(&genHTMLReport, "gen-html-report", "g", false, "generate html report")
 	runCmd.Flags().Float32Var(&caseTimeout, "case-timeout", 120, "set testcase timeout (seconds)")
 	runCmd.Flags().StringVarP(&retry, "retry", "r", "0", "set testcase retry times")
+	runCmd.Flags().StringVarP(&retrytime, "retrytime", "i", "1", "set testcase retry interval time")
 	runCmd.Flags().StringVarP(&title, "title", "t", "Test Report", "set report title")
 }
 
@@ -83,6 +85,9 @@ func makeHRPRunner() *hrp.HRPRunner {
 	}
 	if retry != "0" {
 		os.Setenv("httprunnerretry", retry)
+	}
+	if retrytime != "1" {
+		os.Setenv("httprunnerretrytime", retrytime)
 	}
 	if title != "" {
 		os.Setenv("httprunnertitle", title)

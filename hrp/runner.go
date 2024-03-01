@@ -730,6 +730,17 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 				// 如果环境变量未设置，默认为 0 次重试
 				retryCounts = 0
 			}
+			retrytime := 1
+			retrytimeStr := os.Getenv("httprunnerretrytime")
+			if retrytimeStr != "" {
+				retrytime, err = strconv.Atoi(retrytimeStr)
+				if err != nil {
+					retrytime = 1
+				}
+			} else {
+				// 如果环境变量未设置，默认为间隔1秒
+				retrytime = 1
+			}
 
 			// run times of step
 			loopTimes := step.Struct().Loops
@@ -756,14 +767,14 @@ func (r *SessionRunner) Start(givenVars map[string]interface{}) error {
 					if retries > 0 {
 						log.Warn().Int("retries time:", retries).Int("maxRetries time:", retryCounts).Msg("run step")
 						retriesIndex = fmt.Sprintf(" retry*%d", retries)
-						time.Sleep(time.Second)
+						time.Sleep(time.Duration(retrytime) * time.Second)
 					}
 					// run step
 					startTime := time.Now().Unix()
 					stepResult, err = step.Run(r)
 					stepResult.Name = stepName + loopIndex + retriesIndex
 					stepResult.StartTime = startTime
-					if stepResult.Success || stepResult.HttpCode > 499 {
+					if stepResult.Success {
 						//log.Info().Int64("HttpCode", stepResult.HttpCode).Msg("run HttpCode")
 						r.updateSummary(stepResult)
 						break
