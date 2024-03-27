@@ -246,7 +246,7 @@ type YamlConfig struct {
 // LoadFile loads file content with file extension and assigns to structObj
 func LoadFile(path string, structObj interface{}) (err error) {
 	ext := filepath.Ext(path)
-	if ext == ".env" {
+	if ext == ".env" && os.Getenv("SKIP_ENV_PROCESSING") != "true" {
 		env := os.Getenv("env")
 		path = path + env
 		log.Info().Str("path", path).Msg("load env file")
