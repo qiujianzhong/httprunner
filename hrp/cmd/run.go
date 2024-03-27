@@ -21,6 +21,11 @@ var runCmd = &cobra.Command{
 		setLogLevel(logLevel)
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if skipEnvProcessing {
+			os.Setenv("SKIP_ENV_PROCESSING", "true")
+		} else {
+			os.Setenv("SKIP_ENV_PROCESSING", "false")
+		}
 		var paths []hrp.ITestCase
 		for _, arg := range args {
 			path := hrp.TestCasePath(arg)
@@ -43,6 +48,7 @@ var (
 	retry             string
 	retrytime         string
 	title             string
+	skipEnvProcessing bool
 )
 
 func init() {
@@ -58,6 +64,7 @@ func init() {
 	runCmd.Flags().StringVarP(&retry, "retry", "r", "0", "set testcase retry times")
 	runCmd.Flags().StringVarP(&retrytime, "retrytime", "i", "1", "set testcase retry interval time")
 	runCmd.Flags().StringVarP(&title, "title", "t", "Test Report", "set report title")
+	runCmd.Flags().BoolVar(&skipEnvProcessing, "skip-env", false, "Skip .env file processing")
 }
 
 func makeHRPRunner() *hrp.HRPRunner {
