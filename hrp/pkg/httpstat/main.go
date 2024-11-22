@@ -123,16 +123,16 @@ func (s *Stat) Finish() {
 // Durations returns all durations and timelines of request latencies
 func (s *Stat) Durations() map[string]int64 {
 	return map[string]int64{
-		"DNSLookup":        s.DNSLookup.Milliseconds(),
-		"TCPConnection":    s.TCPConnection.Milliseconds(),
-		"TLSHandshake":     s.TLSHandshake.Milliseconds(),
-		"ServerProcessing": s.ServerProcessing.Milliseconds(),
-		"ContentTransfer":  s.ContentTransfer.Milliseconds(),
-		"NameLookup":       s.NameLookup.Milliseconds(),
-		"Connect":          s.Connect.Milliseconds(),
-		"Pretransfer":      s.Pretransfer.Milliseconds(),
-		"StartTransfer":    s.StartTransfer.Milliseconds(),
-		"Total":            s.Total.Milliseconds(),
+		"DNSLookup":        s.DNSLookup.Microseconds(),
+		"TCPConnection":    s.TCPConnection.Microseconds(),
+		"TLSHandshake":     s.TLSHandshake.Microseconds(),
+		"ServerProcessing": s.ServerProcessing.Microseconds(),
+		"ContentTransfer":  s.ContentTransfer.Microseconds(),
+		"NameLookup":       s.NameLookup.Microseconds(),
+		"Connect":          s.Connect.Microseconds(),
+		"Pretransfer":      s.Pretransfer.Microseconds(),
+		"StartTransfer":    s.StartTransfer.Microseconds(),
+		"Total":            s.Total.Microseconds(),
 	}
 }
 

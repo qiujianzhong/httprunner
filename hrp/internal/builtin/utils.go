@@ -280,7 +280,19 @@ func LoadFile(path string, structObj interface{}) (err error) {
 			err = errors.Wrap(code.LoadJSONError, err.Error())
 		}
 	case ".yaml", ".yml":
+		//读取环境变量httprunnerskip 格式是 "filename1|filename2|filename3" 判断path是否包含在filename1 filename2 等中，用|分割的，包含就跳过
+		httprunnerskip := os.Getenv("httprunnerskip")
+		if httprunnerskip != "" {
+			skip := strings.Split(httprunnerskip, "|")
+			for _, v := range skip {
+				if strings.Contains(path, v) {
+					log.Info().Str("path", path).Msg("skip file")
+					return nil
+				}
+			}
+		}
 		err = yaml.Unmarshal(file, structObj)
+		log.Info().Str("path", path).Msg("load yaml")
 		if err != nil {
 			err = errors.Wrap(code.LoadYAMLError, err.Error())
 		}

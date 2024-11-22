@@ -43,6 +43,7 @@ var (
 	retry             string
 	retrytime         string
 	title             string
+	skip              string
 )
 
 func init() {
@@ -58,6 +59,7 @@ func init() {
 	runCmd.Flags().StringVarP(&retry, "retry", "r", "0", "set testcase retry times")
 	runCmd.Flags().StringVarP(&retrytime, "retrytime", "i", "1", "set testcase retry interval time")
 	runCmd.Flags().StringVarP(&title, "title", "t", "Test Report", "set report title")
+	runCmd.Flags().StringVarP(&skip, "skip", "", "skip file name", "skip file name")
 }
 
 func makeHRPRunner() *hrp.HRPRunner {
@@ -93,6 +95,11 @@ func makeHRPRunner() *hrp.HRPRunner {
 		os.Setenv("httprunnertitle", title)
 	} else {
 		os.Setenv("httprunnertitle", "")
+	}
+	if skip != "" {
+		os.Setenv("httprunnerskip", skip)
+	} else {
+		os.Setenv("httprunnerskip", "")
 	}
 	return runner
 }
