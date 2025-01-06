@@ -149,6 +149,8 @@ function main() {
         $HOME/.hrp/venv/bin/pip3 install fake-useragent
         $HOME/.hrp/venv/bin/pip3 install chardet
         $HOME/.hrp/venv/bin/pip3 install pymysql
+        $HOME/.hrp/venv/bin/pip3 install pyyaml
+        $HOME/.hrp/venv/bin/pip3 install pyotp
     fi
 
     echoInfo "Check installation..."
