@@ -151,6 +151,8 @@ function main() {
         $HOME/.hrp/venv/bin/pip3 install pymysql
         $HOME/.hrp/venv/bin/pip3 install pyyaml
         $HOME/.hrp/venv/bin/pip3 install pyotp
+        $HOME/.hrp/venv/bin/pip3 install sshtunnel
+        $HOME/.hrp/venv/bin/pip3 install psycopg2-binary
     fi
 
     echoInfo "Check installation..."
