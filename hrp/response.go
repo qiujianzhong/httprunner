@@ -50,9 +50,11 @@ func newHttpResponseObject(t *testing.T, parser *Parser, resp *http.Response) (*
 		return nil, err
 	}
 
-	// parse response body
+	// parse response body using decoder with UseNumber to preserve number precision
 	var body interface{}
-	if err := json.Unmarshal(respBodyBytes, &body); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader(respBodyBytes))
+	decoder.UseNumber()
+	if err := decoder.Decode(&body); err != nil {
 		// response body is not json, use raw body
 		body = string(respBodyBytes)
 	}
