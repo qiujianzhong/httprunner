@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -84,6 +85,12 @@ func (s *Summary) genHTMLReport() error {
 	}
 	defer file.Close()
 	writer := bufio.NewWriter(file)
+
+	// 新增排序逻辑：将失败/跳过的测试用例排在前面，成功的排最后
+	sort.Slice(s.Details, func(i, j int) bool {
+		return s.Details[i].Success > s.Details[j].Success
+	})
+
 	tmpl := template.Must(template.New("report").Parse(reportTemplate))
 	err = tmpl.Execute(writer, s)
 	if err != nil {

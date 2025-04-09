@@ -17,6 +17,8 @@
 
 - yaml/json格式检查， 提示错误行数
 
+-- 修复精度丢失的问题
+
 - 性能测试自定义Pushgateway的instance名称  
   export httprunnertype=httprunner
 
